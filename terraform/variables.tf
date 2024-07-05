@@ -5,7 +5,7 @@ variable "region" {
 
 variable "vpc_id" {
   description = "The ID of the VPC where resources will be created"
-  default     = "vpc-08a20b564a94cad98"
+  default     = "vpc-0a92a62ab4980f921"
 }
 
 variable "instance_ami" {
@@ -20,7 +20,7 @@ variable "instance_key_name" {
 
 variable "instance_subnet_id" {
   description = "Public Subnet ID for the instances"
-  default     = "subnet-04e7a2e028dcb65ea"
+  default     = "subnet-02fb7f22d0c732bdd"
 }
 
 variable "instance_type" {
