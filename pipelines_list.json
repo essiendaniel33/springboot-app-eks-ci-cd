@@ -1,19 +1,19 @@
 [
   {
     "name": "terraform-pipeline",
-    "repo": "https://github.com/essiendaniel33/springboot-app-ci-cd.git",
+    "repo": "https://github.com/essiendaniel33/java-app-ci-cd.git",
     "branch": "main",
     "jenkinsfile": "terraform/Jenkinsfile"
   },
   {
     "name": "infrastructure-configuration-pipeline",
-    "repo": "https://github.com/essiendaniel33/springboot-app-ci-cd.git",
+    "repo": "https://github.com/essiendaniel33/java-app-ci-cd.git",
     "branch": "main",
     "jenkinsfile": "ansible/Jenkinsfile"
   },
   {
     "name": "continuous-integration-continuous-deployment-pipeline",
-    "repo": "https://github.com/essiendaniel33/springboot-app-ci-cd.git",
+    "repo": "https://github.com/essiendaniel33/java-app-ci-cd.git",
     "branch": "main",
     "jenkinsfile": "continuous-integration-continuous-deployment/Jenkinsfile"
   }
