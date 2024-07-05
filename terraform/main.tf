@@ -5,7 +5,7 @@ provider "aws" {
 # Define security groups
 resource "aws_security_group" "nexus_sg" {
   vpc_id      = var.vpc_id
-  name        = "nexus-sg"
+  name        = "ess-nexus-sg"
   description = "Security group for Nexus server"
 
   ingress {
@@ -39,7 +39,7 @@ resource "aws_security_group" "nexus_sg" {
 
 resource "aws_security_group" "sonarqube_sg" {
   vpc_id      = var.vpc_id
-  name        = "sonarqube-sg"
+  name        = "ess-sonarqube-sg"
   description = "Security group for Sonarqube server"
 
   ingress {
@@ -79,7 +79,7 @@ resource "aws_security_group" "sonarqube_sg" {
 
 resource "aws_security_group" "monolithic_sg" {
   vpc_id      = var.vpc_id
-  name        = "monolithic-sg"
+  name        = "ess-monolithic-sg"
   description = "Security group for Monolithic server"
 
   ingress {
@@ -113,7 +113,7 @@ resource "aws_security_group" "monolithic_sg" {
 
 resource "aws_security_group" "ansible_sg" {
   vpc_id      = var.vpc_id
-  name        = "ansible-sg"
+  name        = "ess-ansible-sg"
   description = "Security group for Ansible server"
 
   ingress {
@@ -140,7 +140,7 @@ resource "aws_security_group" "ansible_sg" {
 
 resource "aws_security_group" "microservice_sg" {
   vpc_id      = var.vpc_id
-  name        = "microservice-sg"
+  name        = "ess-microservice-sg"
   description = "Security group for Microservice server"
 
   ingress {
@@ -174,7 +174,7 @@ resource "aws_security_group" "microservice_sg" {
 
 resource "aws_security_group" "monitoring_sg" {
   vpc_id      = var.vpc_id
-  name        = "monitoring-sg"
+  name        = "ess-monitoring-sg"
   description = "Security group for Monitoring servers"
 
   ingress {
