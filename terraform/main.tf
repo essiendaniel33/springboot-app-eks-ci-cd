@@ -237,7 +237,7 @@ resource "aws_instance" "nexus_server" {
   associate_public_ip_address = true
 
   tags = {
-    Name = "nexus_server"
+    Name = "ess_nexus_server"
   }
 }
 
@@ -250,7 +250,7 @@ resource "aws_instance" "prometheus_server" {
   associate_public_ip_address = true
 
   tags = {
-    Name = "prometheus_server"
+    Name = "ess_prometheus_server"
   }
 }
 
@@ -263,7 +263,7 @@ resource "aws_instance" "grafana_server" {
   associate_public_ip_address = true
 
   tags = {
-    Name = "grafana_server"
+    Name = "ess_grafana_server"
   }
 }
 
@@ -276,7 +276,7 @@ resource "aws_instance" "sonarqube_server" {
   associate_public_ip_address = true
 
   tags = {
-    Name = "sonarqube_server"
+    Name = "ess_sonarqube_server"
   }
 }
 
@@ -289,7 +289,7 @@ resource "aws_instance" "monolithic_server" {
   associate_public_ip_address = true
 
    tags = {
-    Name = "monolithic_server"
+    Name = "ess_monolithic_server"
   }
 }
 
@@ -302,7 +302,7 @@ resource "aws_instance" "ansible_server" {
   associate_public_ip_address = true
 
    tags = {
-    Name = "ansible_server"
+    Name = "ess_ansible_server"
   }
 }
 
@@ -315,6 +315,6 @@ resource "aws_instance" "microservice_server" {
   associate_public_ip_address = true
 
    tags = {
-    Name = "microservice_server"
+    Name = "ess_microservice_server"
   }
 }
