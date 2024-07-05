@@ -15,7 +15,7 @@ variable "instance_ami" {
 
 variable "instance_key_name" {
   description = "An Existing Keypair to be used for the instances"
-  default     = "project-key"
+  default     = "essien-key"
 }
 
 variable "instance_subnet_id" {
@@ -30,10 +30,10 @@ variable "instance_type" {
 
 variable "s3_bucket_name" {
   description = "The name of the S3 bucket for Terraform state"
-  default     = "stunnerz-springboot-app-bucket"
+  default     = "essien-bucket-app"
 }
 
 variable "dynamodb_table_name" {
   description = "The name of the DynamoDB table for Terraform state locking"
-  default     = "stunnerz-springboot-app-DynamoDB"
+  default     = "essien-app-dynamodb"
 }
