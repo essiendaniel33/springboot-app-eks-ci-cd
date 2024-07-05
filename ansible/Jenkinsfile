@@ -6,7 +6,7 @@ pipeline {
 
     parameters {
         string(name: 'GITHUB_CREDENTIAL', defaultValue: 'github.creds', description: 'Github access credentials id')
-        string(name: 'GITHUB_REPO_URL', defaultValue: 'https://github.com/essiendaniel33/springboot-app-ci-cd.git', description: 'Github repository url')
+        string(name: 'GITHUB_REPO_URL', defaultValue: 'https://github.com/essiendaniel33/java-app-ci-cd.git', description: 'Github repository url')
         string(name: 'GITHUB_BRANCH', defaultValue: 'main', description: 'Github branch for your build')
         string(name: 'SSH_SERVER', defaultValue: 'ess_ansible_server', description: 'The server that Jenkins will SSH into Using Publish Over SSH.')
     }
