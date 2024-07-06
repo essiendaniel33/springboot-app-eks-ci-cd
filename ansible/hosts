@@ -1,8 +1,11 @@
 [jenkins]
-54.82.40.10 ansible_ssh_user=ec2-user ansible_private_key_file=essien-key ## Jenkins_server
+#54.82.40.10 ansible_ssh_user=ec2-user ansible_private_key_file=essien-key ## Jenkins_server
 
 [servers]
-44.222.186.255 ansible_ssh_user=ec2-user ansible_private_key_file=essien-key   ## Monlithic_server   
-34.204.189.34 ansible_ssh_user=ec2-user ansible_private_key_file=essien-key  ## Nexus_server
-3.236.138.150 ansible_ssh_user=ec2-user ansible_private_key_file=essien-key    ## Sonarqube_server   
-18.207.255.255 ansible_ssh_user=ec2-user ansible_private_key_file=essien-key   ## Microservice_server
+#44.222.186.255 ansible_ssh_user=ec2-user ansible_private_key_file=essien-key   ## Monlithic_server   
+#34.204.189.34 ansible_ssh_user=ec2-user ansible_private_key_file=essien-key  ## Nexus_server
+#3.236.138.150 ansible_ssh_user=ec2-user ansible_private_key_file=essien-key    ## Sonarqube_server   
+#18.207.255.255 ansible_ssh_user=ec2-user ansible_private_key_file=essien-key   ## Microservice_server
+
+3.236.96.87 ansible_ssh_user=ec2-user ansible_private_key_file=essien-key   ## prometheus_server   
+3.238.201.193 ansible_ssh_user=ec2-user ansible_private_key_file=essien-key   ## grafana_server   
