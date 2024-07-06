@@ -13,7 +13,7 @@ pipeline {
         string(name: 'GITHUB_REPO_URL', defaultValue: 'https://github.com/essiendaniel33/java-app-ci-cd.git', description: 'Github repository url')
         string(name: 'GITHUB_BRANCH', defaultValue: 'main', description: 'Github branch for your build')
         string(name: 'SONARQUBE_SERVER_NAME', defaultValue: 'ess_sonarqube_server', description: 'Name for your sonarqube server')
-        string(name: 'NEXUS_URL', defaultValue: '44.211.228.216', description: 'Your Nexus URL')
+        string(name: 'NEXUS_URL', defaultValue: 'http://44.211.228.216:8081', description: 'Your Nexus URL')
         string(name: 'NEXUS_CREDENTIAL', defaultValue: 'nexus_creds', description: 'Your Nexus Credentials')
         string(name: 'REMOTE_USER', defaultValue: 'ec2-user', description: 'Remote server username')
         string(name: 'MICROSERVICE_SERVER', defaultValue: 'ess_microservice_server', description: 'The microservice server that Jenkins will SSH into Using Publish Over SSH.')
