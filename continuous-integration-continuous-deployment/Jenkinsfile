@@ -13,6 +13,7 @@ pipeline {
         string(name: 'UPDATE_SERVICE_FILE', defaultValue: 'continuous-integration-continuous-deployment/update-ecs-service.json', description: 'Path to the update service JSON file')
         string(name: 'SERVICE_NAME', defaultValue: 'springboot-app-ecs-service', description: 'ECS Service Name')
         string(name: 'ECS_CLUSTER_NAME', defaultValue: 'springboot-app-ecs-cluster', description: 'ECS Cluster Name')
+        string(name: 'ECR_REPO', defaultValue: 'eks-repo', description: 'ECR repo Name')
     }
 
     environment {
@@ -25,6 +26,7 @@ pipeline {
         UPDATE_SERVICE_FILE = "${params.UPDATE_SERVICE_FILE}"
         SERVICE_NAME = "${params.SERVICE_NAME}"
         ECS_CLUSTER_NAME = "${params.ECS_CLUSTER_NAME}"
+        ECR_REPO = "${params.ECR_REPO}"
     }
 
     stages {
@@ -67,8 +69,8 @@ pipeline {
                         sh """
                         ./mvnw clean install
                         aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 905418280053.dkr.ecr.us-east-1.amazonaws.com
-                        docker tag test-app-html-image 905418280053.dkr.ecr.us-east-1.amazonaws.com/test-repo:${VERSION}
-                        docker push 905418280053.dkr.ecr.us-east-1.amazonaws.com/test-repo:${VERSION}
+                        docker tag springboot-app-image 905418280053.dkr.ecr.us-east-1.amazonaws.com/${ECR_REPO}:${VERSION}
+                        docker push 905418280053.dkr.ecr.us-east-1.amazonaws.com/${ECR_REPO}:${VERSION}
                         """
                     }
                 }
