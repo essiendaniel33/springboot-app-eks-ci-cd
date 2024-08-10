@@ -1,7 +1,7 @@
 {
   "cluster": "springboot-app-ecs-cluster",
   "service": "springboot-app-ecs-service",
-  "taskDefinition": "arn:aws:ecs:us-east-1:905418280053:task-definition/test-app:2",
+  "taskDefinition": "arn:aws:ecs:us-east-1:905418280053:task-definition/springboot-app:2",
   "desiredCount": 3,
   "networkConfiguration": {
     "awsvpcConfiguration": {
