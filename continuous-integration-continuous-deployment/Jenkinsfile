@@ -11,8 +11,8 @@ pipeline {
         string(name: 'TASK_DEF_JSON', defaultValue: 'continuous-integration-continuous-deployment/task-def.json', description: 'Path to the task definition JSON file')
         string(name: 'CREATE_SERVICE_FILE', defaultValue: 'continuous-integration-continuous-deployment/create-ecs-service.json', description: 'Path to the create service JSON file')
         string(name: 'UPDATE_SERVICE_FILE', defaultValue: 'continuous-integration-continuous-deployment/update-ecs-service.json', description: 'Path to the update service JSON file')
-        string(name: 'SERVICE_NAME', defaultValue: 'test-ecs-service', description: 'ECS Service Name')
-        string(name: 'ECS_CLUSTER_NAME', defaultValue: 'test-ecs-cluster', description: 'ECS Cluster Name')
+        string(name: 'SERVICE_NAME', defaultValue: 'springboot-app-ecs-service', description: 'ECS Service Name')
+        string(name: 'ECS_CLUSTER_NAME', defaultValue: 'springboot-app-ecs-cluster', description: 'ECS Cluster Name')
     }
 
     environment {
