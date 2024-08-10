@@ -4,63 +4,43 @@ pipeline {
         timeout(time: 10, unit: 'MINUTES')
     }
     parameters {
-        string(name: 'IMAGE_TAG', defaultValue: "${BUILD_ID}", description: 'Docker image tag')
-        string(name: 'DOCKER_IMAGE', defaultValue: 'essiendaniel33/java-app-ci-cd', description: 'Docker image name')
-        string(name: 'CONTAINER_NAME', defaultValue: 'java-app', description: 'Docker container name')
-        string(name: 'REGISTRY', defaultValue: 'essiendaniel33/java-app-ci-cd', description: 'Your Docker registry repository Name')
-        string(name: 'REGISTRY_CREDENTIAL', defaultValue: 'dockerhub_creds', description: 'Docker registry credentials id')
-        string(name: 'GITHUB_CREDENTIAL', defaultValue: 'github.creds', description: 'Github access credentials id')
-        string(name: 'GITHUB_REPO_URL', defaultValue: 'https://github.com/essiendaniel33/java-app-ci-cd.git', description: 'Github repository url')
-        string(name: 'GITHUB_BRANCH', defaultValue: 'main', description: 'Github branch for your build')
-        string(name: 'SONARQUBE_SERVER_NAME', defaultValue: 'ess_sonarqube_server', description: 'Name for your sonarqube server')
-        string(name: 'NEXUS_URL', defaultValue: '44.211.228.216:8081', description: 'Your Nexus URL')
-        string(name: 'NEXUS_CREDENTIAL', defaultValue: 'nexus_creds', description: 'Your Nexus Credentials')
-        string(name: 'REMOTE_USER', defaultValue: 'ec2-user', description: 'Remote server username')
-        string(name: 'MICROSERVICE_SERVER', defaultValue: 'ess_microservice_server', description: 'The microservice server that Jenkins will SSH into Using Publish Over SSH.')
-        string(name: 'MONOLITHIC_SERVER', defaultValue: 'ess_monolithic_server', description: 'The monolithic server that Jenkins will SSH into Using Publish Over SSH.')
+        string(name: 'GITHUB_CREDENTIAL', defaultValue: 'github_cred', description: 'Github access credentials id')
+        string(name: 'GITHUB_BRANCH', defaultValue: 'main', description: 'Branch to build from')
+        string(name: 'GITHUB_REPO_URL', defaultValue: 'https://github.com/essiendaniel33/marketvector.git', description: 'Repository URL to build from')
+        string(name: 'VERSION', defaultValue: "V00${BUILD_ID}", description: 'Version of Docker image to be built, e.g., V001')
+        string(name: 'TASK_DEF_JSON', defaultValue: 'continuous-integration-continuous-deployment/task-def.json', description: 'Path to the task definition JSON file')
+        string(name: 'CREATE_SERVICE_FILE', defaultValue: 'continuous-integration-continuous-deployment/create-ecs-service.json', description: 'Path to the create service JSON file')
+        string(name: 'UPDATE_SERVICE_FILE', defaultValue: 'continuous-integration-continuous-deployment/update-ecs-service.json', description: 'Path to the update service JSON file')
+        string(name: 'SERVICE_NAME', defaultValue: 'test-ecs-service', description: 'ECS Service Name')
+        string(name: 'ECS_CLUSTER_NAME', defaultValue: 'test-ecs-cluster', description: 'ECS Cluster Name')
     }
 
     environment {
-        IMAGE_TAG = "${params.IMAGE_TAG}"
-        DOCKER_IMAGE = "${params.DOCKER_IMAGE}"
-        CONTAINER_NAME = "${params.CONTAINER_NAME}"
-        REMOTE_USER = "${params.REMOTE_USER}"
-        REGISTRY = "${params.REGISTRY}"
-        REGISTRY_CREDENTIAL = "${params.REGISTRY_CREDENTIAL}"
         GITHUB_CREDENTIAL = "${params.GITHUB_CREDENTIAL}"
-        GITHUB_REPO_URL = "${params.GITHUB_REPO_URL}"
         GITHUB_BRANCH = "${params.GITHUB_BRANCH}"
-        SONARQUBE_SERVER_NAME = "${params.SONARQUBE_SERVER_NAME}"
-        NEXUS_URL = "${params.NEXUS_URL}"
-        NEXUS_CREDENTIAL = "${params.NEXUS_CREDENTIAL}"
-        MICROSERVICE_SERVER = "${params.MICROSERVICE_SERVER}"
-        MONOLITHIC_SERVER = "${params.MONOLITHIC_SERVER}"
+        GITHUB_REPO_URL = "${params.GITHUB_REPO_URL}"
+        VERSION = "${params.VERSION}"
+        TASK_DEF_JSON = "${params.TASK_DEF_JSON}"
+        CREATE_SERVICE_FILE = "${params.CREATE_SERVICE_FILE}"
+        UPDATE_SERVICE_FILE = "${params.UPDATE_SERVICE_FILE}"
+        SERVICE_NAME = "${params.SERVICE_NAME}"
+        ECS_CLUSTER_NAME = "${params.ECS_CLUSTER_NAME}"
     }
 
     stages {
-        
-        stage("Validate Parameters") {
-            steps {
-                script {
-                    // Check if required parameters are provided
-                    def requiredParameters = ['IMAGE_TAG', 'DOCKER_IMAGE', 'CONTAINER_NAME', 'REMOTE_USER', 'REGISTRY', 'REGISTRY_CREDENTIAL', 'GITHUB_CREDENTIAL', 'GITHUB_REPO_URL', 'GITHUB_BRANCH']
-                    for (param in requiredParameters) {
-                        if (!params.containsKey(param) || params[param].trim() == "") {
-                            error("Parameter '$param' is missing or empty. Please provide a value.")
-                        }
-                    }
-                }
-            }
-        }
-        
-        stage("Checkout Code From GitHub") {
-            steps {
-                script {
-                    git branch: "${GITHUB_BRANCH}", credentialsId: "${GITHUB_CREDENTIAL}", url: "${GITHUB_REPO_URL}"
-                }
-            }
-        }
 
+        stage('Clean Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+        
+        stage('Clone GitHub Repo') {
+            steps {
+                git branch: "${GITHUB_BRANCH}", credentialsId: "${GITHUB_CREDENTIAL}", url: "${GITHUB_REPO_URL}"
+            }
+        }
+        
         
         stage('Application Build And Test') {
             steps {
@@ -70,7 +50,7 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
+ /*       stage('SonarQube Analysis') {
             steps {
                 script {
                     withSonarQubeEnv("${SONARQUBE_SERVER_NAME}") {
@@ -79,143 +59,104 @@ pipeline {
                 }
             }
         }
-       
-        stage('Upload Snapshot to Nexus Repository') {
-            steps {
-                script {
-                  def nexusUrl = "${NEXUS_URL}"
-                  def nexusCredentialsId = "${NEXUS_CREDENTIAL}"
-                  def groupId = 'com.app'
-                  def artifactId = 'blog'
-                  def version = '0.0.1-SNAPSHOT'
-                  def packaging = 'jar'
-
-                  def artifactPath = "target/${artifactId}-${version}.${packaging}"
-
-                nexusArtifactUploader(
-                    nexusVersion: 'nexus3',
-                    protocol: 'http',
-                    nexusUrl: nexusUrl,
-                    groupId: groupId,
-                    version: version,
-                    repository: 'maven-snapshots',
-                    credentialsId: nexusCredentialsId,
-                    artifacts: [
-                        [artifactId: artifactId,
-                         classifier: '',
-                         file: artifactPath,
-                         type: packaging,
-                         filename: "${artifactId}-${version}.${packaging}"]
-                    ]
-                )
-            }
-        }
-    }
-        
+   */    
+             
         stage('Docker Build and Push') {
             steps {
                 script {
-                    // Log in to Docker Registry
-                    docker.withRegistry('', REGISTRY_CREDENTIAL) {
-                        // Run your shell script with the IMAGE_TAG parameter
                         sh """
                         ./mvnw clean install
-                        docker rmi -f ${DOCKER_IMAGE}:V00${IMAGE_TAG} &>/dev/null && echo 'Removed old container'
-                        docker build -t ${DOCKER_IMAGE}:V00${IMAGE_TAG} .
-                        docker push ${DOCKER_IMAGE}:V00${IMAGE_TAG}
+                        aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 905418280053.dkr.ecr.us-east-1.amazonaws.com
+                        docker tag test-app-html-image 905418280053.dkr.ecr.us-east-1.amazonaws.com/test-repo:${VERSION}
+                        docker push 905418280053.dkr.ecr.us-east-1.amazonaws.com/test-repo:${VERSION}
                         """
+                    }
+                }
+            }
+        
+       stage('Register Task Definition') {
+            steps {
+                script {
+                    def taskDefArn = sh(script: """
+                        aws ecs register-task-definition --cli-input-json file://${TASK_DEF_JSON} --query 'taskDefinition.taskDefinitionArn' --output text
+                    """, returnStdout: true).trim()
+
+                    echo "Task Definition ARN: ${taskDefArn}"
+
+                    def createServiceJson = readFile(file: CREATE_SERVICE_FILE)
+                    createServiceJson = createServiceJson.replaceAll(/"taskDefinition": "arn:aws:ecs:[^"]+"/, "\"taskDefinition\": \"${taskDefArn}\"")
+                    writeFile(file: CREATE_SERVICE_FILE, text: createServiceJson)
+
+                    def updateServiceJson = readFile(file: UPDATE_SERVICE_FILE)
+                    updateServiceJson = updateServiceJson.replaceAll(/"taskDefinition": "arn:aws:ecs:[^"]+"/, "\"taskDefinition\": \"${taskDefArn}\"")
+                    writeFile(file: UPDATE_SERVICE_FILE, text: updateServiceJson)
+                }
+            }
+        }
+
+        stage('Stop all running tasks') {
+            steps {
+                script {
+                    def serviceExists = sh(script: """
+                        aws ecs describe-services --cluster ${ECS_CLUSTER_NAME} --services ${SERVICE_NAME} --query "services[?status=='ACTIVE'].[serviceName]" --output text
+                    """, returnStdout: true).trim()
+
+                    if (serviceExists) {
+                        sh """
+                        tasks=\$(aws ecs list-tasks --cluster ${ECS_CLUSTER_NAME} --service-name ${SERVICE_NAME} --desired-status RUNNING --query taskArns --output text)
+                        for task in \$tasks; do
+                            aws ecs stop-task --cluster ${ECS_CLUSTER_NAME} --task \$task
+                        done
+                        """
+                    } else {
+                        echo "Service ${SERVICE_NAME} does not exist. Skipping stop tasks step."
                     }
                 }
             }
         }
 
-        stage('Deploy To Microservice Server') {
+        stage('Wait for Tasks to Stop') {
             steps {
                 script {
-                   def deployCommand = '''
-    set -ex
-    mkdir -p /home/${REMOTE_USER}/deployment
-    echo 'version: "3.9"
+                    def serviceExists = sh(script: """
+                        aws ecs describe-services --cluster ${ECS_CLUSTER_NAME} --services ${SERVICE_NAME} --query "services[?status=='ACTIVE'].[serviceName]" --output text
+                    """, returnStdout: true).trim()
 
-services:
-  blog-application:
-    image: ${DOCKER_IMAGE}:V00${IMAGE_TAG}
-    container_name: ${CONTAINER_NAME}
-    ports:
-      - "8081:8081"' > /home/${REMOTE_USER}/deployment/docker-compose.yml
-    cd /home/${REMOTE_USER}/deployment/
-    sudo docker rm -f ${CONTAINER_NAME}
-    sudo /usr/local/bin/docker-compose down 
-    echo 'Removed old container'
-    sleep 3
-    echo 'Starting a new container with the image ${DOCKER_IMAGE}:V00${IMAGE_TAG}'
-    sudo /usr/local/bin/docker-compose up -d
-'''
+                    if (serviceExists) {
+                        timeout(time: 5, unit: 'MINUTES') {
+                            waitUntil {
+                                def tasks = sh(script: """
+                                    aws ecs list-tasks --cluster ${ECS_CLUSTER_NAME} --service-name ${SERVICE_NAME} --desired-status RUNNING --query taskArns --output text
+                                """, returnStdout: true).trim()
 
-
-                    sshPublisher(publishers: [sshPublisherDesc(
-                        configName: env.MICROSERVICE_SERVER,
-                        transfers: [sshTransfer(
-                            cleanRemote: false,
-                            execCommand: deployCommand,
-                            execTimeout: 120000,
-                            flatten: false,
-                            makeEmptyDirs: false,
-                            noDefaultExcludes: false,
-                            patternSeparator: '[, ]+',
-                            remoteDirectory: '',
-                            remoteDirectorySDF: false,
-                            removePrefix: '',
-                            sourceFiles: ''
-                        )],
-                        usePromotionTimestamp: false,
-                        useWorkspaceInPromotion: false,
-                        verbose: true
-                    )])
+                                return tasks == null || tasks.isEmpty()
+                            }
+                        }
+                    } else {
+                        echo "Service ${SERVICE_NAME} does not exist. Skipping wait for tasks to stop step."
+                    }
                 }
             }
         }
 
-        stage('Deploy To Monolithic Server') {
+        stage('Check and Update ECS Service') {
             steps {
                 script {
-                   def Command = '''
-                       set -ex
-                       cd ~/blog-app/
-                # Check if any process is listening on port 8081 and kill it
-                PID=$(/usr/sbin/lsof -t -i:8081) || true
-                if [ -n "$PID" ]; then
-                    kill $PID || true
-                    echo "Killed process $PID"
-                else
-                    echo "No process found listening on port 8081"
-                fi
+                    def clientToken = UUID.randomUUID().toString()
+                    sh """
+                    SERVICE_EXISTS=\$(aws ecs describe-services --cluster ${ECS_CLUSTER_NAME} --services ${SERVICE_NAME} --query "services[?status=='ACTIVE'].[serviceName]" --output text)
 
-                # Run the new jar file
-                java -jar blog-0.0.1-SNAPSHOT.jar > logfile 2>&1 &
-                echo "Started new blog application"
-                sleep 7
-                cat logfile
-            '''
-
-            sshPublisher(publishers: [sshPublisherDesc(
-                configName: env.MONOLITHIC_SERVER,
-                transfers: [sshTransfer(
-                    sourceFiles: 'target/blog-0.0.1-SNAPSHOT.jar',
-                    removePrefix: 'target/',
-                    makeEmptyDirs: false,
-                    remoteDirectory: '/blog-app/',
-                    execCommand: Command,
-                    execTimeout: 120000
-                )],
-                usePromotionTimestamp: false,
-                useWorkspaceInPromotion: false,
-                verbose: true,
-            )])
+                    if [ -z "\$SERVICE_EXISTS" ]; then
+                      echo "Service ${SERVICE_NAME} does not exist. Creating service..."
+                      aws ecs create-service --cli-input-json file://${CREATE_SERVICE_FILE} --client-token ${clientToken}
+                    else
+                      echo "Service ${SERVICE_NAME} exists. Updating service..."
+                      aws ecs update-service --cli-input-json file://${UPDATE_SERVICE_FILE}
+                    fi
+                    """
+                }
+            }
         }
-    }
-}
-
 
     }
 }
