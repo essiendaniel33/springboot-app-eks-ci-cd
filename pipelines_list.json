@@ -1,22 +1,22 @@
-[
-  {
-    "name": "terraform-pipeline",
-    "repo": "https://github.com/essiendaniel33/java-app-ci-cd.git",
-    "branch": "main",
-    "jenkinsfile": "terraform/Jenkinsfile"
-  },
-  {
-    "name": "infrastructure-configuration-pipeline",
-    "repo": "https://github.com/essiendaniel33/java-app-ci-cd.git",
-    "branch": "main",
-    "jenkinsfile": "ansible/Jenkinsfile"
-  },
-  {
-    "name": "continuous-integration-continuous-deployment-pipeline",
-    "repo": "https://github.com/essiendaniel33/java-app-ci-cd.git",
-    "branch": "main",
-    "jenkinsfile": "continuous-integration-continuous-deployment/Jenkinsfile"
-  }
-  
-  
-]
+{
+  "rbac-folders": [
+    "terraform",
+    "ci-cd"
+  ],
+  "terraform": [
+    {
+      "name": "infrastructure-provision",
+      "repo": "https://github.com/essiendaniel33/marketvector.git",
+      "branch": "main",
+      "jenkinsfile": "terraform/Jenkinsfile"
+    }
+  ],
+  "ci-cd": [
+    {
+      "name": "continuous-integration-continuous-deployment",
+      "repo": "https://github.com/essiendaniel33/marketvector.git",
+      "branch": "main",
+      "jenkinsfile": "continuous-integration-continuous-deployment/Jenkinsfile"
+    }
+  ]
+}
