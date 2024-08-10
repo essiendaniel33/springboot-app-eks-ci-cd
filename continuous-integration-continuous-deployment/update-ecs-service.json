@@ -1,6 +1,6 @@
 {
-  "cluster": "test-ecs-cluster",
-  "service": "test-ecs-service",
+  "cluster": "springboot-app-ecs-cluster",
+  "service": "springboot-app-ecs-service",
   "taskDefinition": "arn:aws:ecs:us-east-1:905418280053:task-definition/test-app:2",
   "desiredCount": 3,
   "networkConfiguration": {
@@ -18,8 +18,8 @@
   "loadBalancers": [
     {
       "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:905418280053:targetgroup/test-tg/46ad303d1c1158d0",
-      "containerName": "test-app",
-      "containerPort": 80
+      "containerName": "springboot-app",
+      "containerPort": 8081
     }
   ],
   "deploymentConfiguration": {
