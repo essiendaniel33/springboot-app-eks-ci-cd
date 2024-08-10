@@ -69,6 +69,7 @@ pipeline {
                         sh """
                         ./mvnw clean install
                         aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 905418280053.dkr.ecr.us-east-1.amazonaws.com
+                        docker build -t springboot-app-image .
                         docker tag springboot-app-image 905418280053.dkr.ecr.us-east-1.amazonaws.com/${ECR_REPO}:${VERSION}
                         docker push 905418280053.dkr.ecr.us-east-1.amazonaws.com/${ECR_REPO}:${VERSION}
                         """
