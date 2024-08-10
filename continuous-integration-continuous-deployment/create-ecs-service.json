@@ -1,7 +1,7 @@
 {
-  "cluster": "test-ecs-cluster",
-  "serviceName": "test-ecs-service",
-  "taskDefinition": "arn:aws:ecs:us-east-1:905418280053:task-definition/test-app:1",
+  "cluster": "springboot-app-ecs-cluster",
+  "serviceName": "springboot-app-ecs-service",
+  "taskDefinition": "arn:aws:ecs:us-east-1:905418280053:task-definition/springboot-app:1",
   "desiredCount": 3,
   "launchType": "FARGATE",
   "platformVersion": "LATEST",
@@ -20,8 +20,8 @@
   "loadBalancers": [
     {
       "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:905418280053:targetgroup/test-tg/46ad303d1c1158d0",
-      "containerName": "test-app",
-      "containerPort": 80
+      "containerName": "springboot-app",
+      "containerPort": 8081
     }
   ],
   "deploymentConfiguration": {
