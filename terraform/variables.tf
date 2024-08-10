@@ -19,19 +19,19 @@ variable "subnet_ids" {
 variable "cluster_name" {
   description = "The name of the ECS cluster"
   type        = string
-  default     = "test-ecs-cluster"
+  default     = "springboot-app-ecs-cluster"
 }
 
 variable "service_name" {
   description = "The name of the ECS service"
   type        = string
-  default     = "test-ecs-service"
+  default     = "springboot-app-ecs-service"
 }
 
 variable "container_port" {
   description = "The port on which the container will listen"
   type        = number
-  default     = 80
+  default     = 8081
 }
 
 variable "desired_count" {
