@@ -4,10 +4,10 @@
   ],
   "ci-cd": [
     {
-      "name": "continuous-integration-continuous-deployment",
+      "name": "Kubernetes",
       "repo": "https://github.com/essiendaniel33/springboot-app-eks-ci-cd.git",
       "branch": "main",
-      "jenkinsfile": "continuous-integration-continuous-deployment/Jenkinsfile"
+      "jenkinsfile": "Kubernetes/Jenkinsfile"
     }
   ]
 }
