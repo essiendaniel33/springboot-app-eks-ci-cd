@@ -19,4 +19,4 @@ spec:
       - name: springboot-app-container
         image: 905418280053.dkr.ecr.us-east-1.amazonaws.com/eks-repo:V001
         ports:
-        - containerPort: 80
+        - containerPort: 8081
