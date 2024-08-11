@@ -3,7 +3,7 @@ pipeline {
     parameters {
         string(name: 'GITHUB_CREDENTIAL', defaultValue: 'github_creds', description: 'Github access credentials id')
         string(name: 'GITHUB_BRANCH', defaultValue: 'main', description: 'Branch to build from')
-        string(name: 'GITHUB_REPO_URL', defaultValue: 'https://github.com/essiendaniel33/marketvector.git', description: 'Repository URL to build from')
+        string(name: 'GITHUB_REPO_URL', defaultValue: 'https://github.com/essiendaniel33/springboot-app-eks-ci-cd.git', description: 'Repository URL to build from')
         string(name: 'VERSION', defaultValue: "V00${BUILD_ID}", description: 'Version of Docker image to be built, e.g., V001')
     }
 
@@ -35,12 +35,14 @@ pipeline {
             }
         }
 
-        stage('Push To Elastic Container Registry') {
+        stage('Docker build and push') {
             steps {
                 script {
                     sh """
+                        ./mvnw clean install
                         aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ECR_REPO_URL}
-                        docker tag eks-repo:latest ${ECR_REPO_URL}:${VERSION}
+                        docker build -t springboot-app-image .
+                        docker tag springboot-app-image:latest ${ECR_REPO_URL}:${VERSION}
                         docker push ${ECR_REPO_URL}:${VERSION}
                     """
                 }
@@ -83,7 +85,7 @@ pipeline {
                         sh """
                             echo "Fetching Kubernetes cluster services"
                             export KUBECONFIG=${KUBECONFIG}
-                            kubectl get svc --namespace=mv-app-dev
+                            kubectl get svc --namespace=springboot-app-dev
                         """
                     }
                 }
