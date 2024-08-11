@@ -29,12 +29,6 @@ pipeline {
             }
         }
 
-        stage('Building Docker Image') {
-            steps {
-                sh "docker build -t eks-repo ."
-            }
-        }
-
         stage('Docker build and push') {
             steps {
                 script {
