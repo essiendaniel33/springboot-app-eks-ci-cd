@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mv-app
+  namespace: mv-app-dev
+  labels:
+    app: mv-app
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: mv-app
+  template:
+    metadata:
+      labels:
+        app: mv-app
+    spec:
+      containers:
+      - name: mv-app-container
+        image: 905418280053.dkr.ecr.us-east-1.amazonaws.com/eks-repo:V009
+        ports:
+        - containerPort: 80
